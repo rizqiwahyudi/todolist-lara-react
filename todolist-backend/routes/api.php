@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\TodoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +20,10 @@ use App\Http\Controllers\UserController;
 // });
 
 Route::group(['middleware' => 'api'], function(){
-    route::resource('profiles', ProfileController::class);
-    route::resource('users', UserController::class);
+    Route::get('todos/trash',                    [TodoController::class, 'getDeletedTodos']);
+    Route::get('todos/restore/{id}',             [TodoController::class, 'restoreTodo']);
+    Route::get('todos/restore',                  [TodoController::class, 'restoreTodos']);
+    Route::delete('todos/delete-permanent/{id}', [TodoController::class, 'deletePermanentTodo']);
+    Route::delete('todos/delete-permanent',      [TodoController::class, 'deletePermanentTodos']);
+    Route::resource('todos',                     TodoController::class);
 });

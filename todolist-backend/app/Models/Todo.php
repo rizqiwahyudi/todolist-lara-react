@@ -4,13 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Profile extends Model
+class Todo extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
-        'full_name',
-        'address',
+        'name',
+        'start_date',
+        'end_date',
+        'progress'
     ];
 }
