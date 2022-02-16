@@ -153,7 +153,7 @@ class TodoController extends Controller
 
         if ($todo) {
             return response()->json([
-                'message' => 'Delete All Temporarily All Todos Successfully.'
+                'message' => 'Delete All Temporarily Todos Successfully.'
             ]);
         }
     }
