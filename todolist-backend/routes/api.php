@@ -25,5 +25,6 @@ Route::group(['middleware' => 'api'], function(){
     Route::get('todos/restore',                  [TodoController::class, 'restoreTodos']);
     Route::delete('todos/delete-permanent/{id}', [TodoController::class, 'deletePermanentTodo']);
     Route::delete('todos/delete-permanent',      [TodoController::class, 'deletePermanentTodos']);
+    Route::delete('todos/destroy-all',           [TodoController::class, 'destroyAllTodos']);
     Route::resource('todos',                     TodoController::class);
 });

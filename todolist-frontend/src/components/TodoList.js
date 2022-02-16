@@ -28,21 +28,47 @@ const ListTodos = () => {
              confirmButtonText: 'Yes, delete it!'
            }).then((result) => {
              if (result.isConfirmed) {
-              api.delete(`/todos/${id}`);
-               Swal.fire(
-                 'Deleted!',
-                 'Your file has been deleted.',
-                 'success'
-               ).then((result) => {
+              api.delete(`/todos/${id}`).then(({data}) => {
+                Swal.fire({
+                    title: data.message,
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                }).then((result) => {
                     getTodos()
-               })
+                })
+              })
              }
            })
+     }
+
+     const deleteTodos = async () => {
+        await Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                api.delete('/todos/destroy-all').then(({data}) => {
+                    Swal.fire({
+                        title: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    }).then((result) => {
+                        getTodos()
+                    })
+                })
+            }
+        })
      }
 
     return (
         <div>
             <Link to="/addTodo" className="btn btn-outline-primary">Create Todo</Link>&nbsp;
+            <button className="btn btn-outline-danger" onClick={() => deleteTodos()}>Delete All</button>&nbsp;
             <Link to="/trash" className="btn btn-outline-warning">Trash</Link>
 
             <table className="table table-striped">

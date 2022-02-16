@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Todo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TodoController extends Controller
 {
@@ -40,7 +41,20 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required|string|unique:todos,name',
+            'start_date' => 'required|date|after:yesterday',
+            'end_date'   => 'required|date|after:start_date',
+            'progress'   => 'required|numeric|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $data = $validator->validated();
         $todo = Todo::create($data);
 
         if ($todo) {
@@ -87,7 +101,20 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'name'       => 'required|string|unique:todos,name,'.$todo->id,
+            'start_date' => 'required|date|after:yesterday',
+            'end_date'   => 'required|date',
+            'progress'   => 'required|numeric|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $data = $validator->validated();
         $todoUpdate = $todo->update($data);
 
         if ($todoUpdate) {
@@ -112,6 +139,21 @@ class TodoController extends Controller
             return response()->json([
                 'message' => 'Delete Temporarily Todo Successfully.',
                 'data'    => $todo
+            ]);
+        }
+    }
+
+    public function destroyAllTodos()
+    {
+        $todos = Todo::all();
+        
+        foreach ($todos as $todo) {
+            $todo->delete();
+        }
+
+        if ($todo) {
+            return response()->json([
+                'message' => 'Delete All Temporarily All Todos Successfully.'
             ]);
         }
     }

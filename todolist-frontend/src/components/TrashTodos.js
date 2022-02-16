@@ -18,25 +18,27 @@ const TrashTodos = () => {
     }
 
     const restoreTodo = async (id) => {
-        await api.get(`/todos/restore/${id}`);
-        Swal.fire(
-            'Restore!',
-            'Your file has been restored.',
-            'success'
-        ).then((result) => {
-            navigate('/');
-        });
+        await api.get(`/todos/restore/${id}`).then(({data}) => {
+            Swal.fire({
+                title: data.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                navigate('/');
+            })
+        })
     }
 
     const restoreAllTodos = async () => {
-        await api.get('/todos/restore');
-        Swal.fire(
-            'Restore!',
-            'Your files has been restored.',
-            'success'
-        ).then((result) => {
-            navigate('/');
-        });
+        await api.get('/todos/restore').then(({data}) => {
+            Swal.fire({
+                title: data.message,
+                icon: 'success',
+                confirmButtonColor: '#3085d6',
+            }).then((result) => {
+                navigate('/');
+            })
+        })
     }
 
     const deleteTodo = async (id) => {
@@ -50,13 +52,14 @@ const TrashTodos = () => {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
               if (result.isConfirmed) {
-                  api.delete(`/todos/delete-permanent/${id}`);
-                  Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                  ).then((result) => {
-                    getTodos()
+                  api.delete(`/todos/delete-permanent/${id}`).then(({data}) => {
+                        Swal.fire({
+                            title: data.message,
+                            icon: 'success',
+                            confirmButtonColor: '#3085d6',
+                        }).then((result) => {
+                            navigate('/');
+                        })
                   })
               }
           })
@@ -73,14 +76,15 @@ const TrashTodos = () => {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
               if (result.isConfirmed) {
-                api.delete('/todos/delete-permanent');
-                Swal.fire(
-                    'Deleted!',
-                    'Your All files has been deleted.',
-                    'success'
-                  ).then((result) => {
-                    navigate('/');
-                  })
+                api.delete('/todos/delete-permanent').then(({data}) => {
+                    Swal.fire({
+                        title: data.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                    }).then((result) => {
+                        navigate('/');
+                    })
+                })
               }
           })
     }
